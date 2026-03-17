@@ -1,0 +1,42 @@
+{
+    "renjini221@gmail.com": {
+        "name": "SREEPATHI B",
+        "password": "sree",
+        "place": "Melila",
+        "dob": "2009-03-23",
+        "roll": "29",
+        "division": "A"
+    },
+    "dhf@gmail.com": {
+        "name": "Aryasree",
+        "password": "34567",
+        "place": "Melila",
+        "dob": "2025-07-09",
+        "roll": "89",
+        "division": "B"
+    },
+    "cr7@gmail.com": {
+        "name": "Renjini r",
+        "password": "1234",
+        "place": "Melila",
+        "dob": "2025-07-09",
+        "roll": "23",
+        "division": "A"
+    },
+    "devan@gmail.com": {
+        "name": "DEVANANDHAN R",
+        "password": "1234",
+        "dob": "2025-07-10",
+        "place": "melila",
+        "roll": "12",
+        "division": "A"
+    },
+    "jdskskjs@gmail.com": {
+        "name": "kjsdjkdf",
+        "password": "sree@2009",
+        "place": "jfj",
+        "dob": "2026-03-05",
+        "roll": "39847918",
+        "division": "B"
+    }
+}
