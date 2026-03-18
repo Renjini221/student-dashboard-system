@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session
 import os
 import json
 
@@ -6,26 +6,45 @@ app = Flask(__name__)
 app.secret_key = 'mysecretkey'
 USERS_FILE = 'users.json'
 
+
 def load_users():
+    """Load saved users from disk."""
     if os.path.exists(USERS_FILE):
-        with open(USERS_FILE, 'r') as f:
-            return json.load(f)
+        with open(USERS_FILE, 'r') as file:
+            try:
+                return json.load(file)
+            except json.JSONDecodeError:
+                return {}
     return {}
 
+
 def save_users(users):
-    with open(USERS_FILE, 'w') as f:
-        json.dump(users, f, indent=4)
+    """Persist users to disk."""
+    with open(USERS_FILE, 'w') as file:
+        json.dump(users, file, indent=4)
+
 
 @app.route('/')
 def dashboard():
-    if 'user' in session:
-        users = load_users()
-        email = session['user']
-        if email in users:
-            user_data = users[email]
-            user_data['email'] = email
-            return render_template('main.html', page='dashboard', data=user_data)
-    return redirect('/login')
+    if 'user' not in session:
+        return redirect('/login')
+
+    users = load_users()
+    email = session['user']
+    user_data = users.get(email)
+
+    if not user_data:
+        session.pop('user', None)
+        return redirect('/login')
+
+    user_info = dict(user_data)
+    user_info['email'] = email
+    if 'cls' not in user_info:
+        user_info['cls'] = user_info.get('class_name')
+    if 'div' not in user_info:
+        user_info['div'] = user_info.get('division')
+    return render_template('main.html', page='dashboard', data=user_info)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -34,12 +53,15 @@ def login():
         users = load_users()
         email = request.form['email']
         password = request.form['password']
+
         if email in users and users[email]['password'] == password:
             session['user'] = email
             return redirect('/')
-        else:
-            error = "Invalid credentials."
+
+        error = "Invalid credentials."
+
     return render_template('main.html', page='login', error=error)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -51,7 +73,8 @@ def register():
             "place": request.form['place'],
             "dob": request.form['dob'],
             "roll": request.form['roll'],
-            "division": request.form['division']
+            "div": request.form['division'],
+            "cls": request.form['cls'],
         }
         email = request.form['email']
 
@@ -65,10 +88,12 @@ def register():
 
     return render_template('main.html', page='register', error=error)
 
+
 @app.route('/logout')
 def logout():
     session.pop('user', None)
     return redirect('/login')
+
 
 @app.route('/admin-login', methods=['GET', 'POST'])
 def admin_login():
@@ -78,32 +103,45 @@ def admin_login():
         password = request.form['password']
         if username == 'admin' and password == 'admin':
             return redirect('/admin-select')
-        else:
-            error = "Invalid admin credentials."
+        error = "Invalid admin credentials."
+
     return render_template('main.html', page='admin-login', error=error)
+
 
 @app.route('/admin-select', methods=['GET', 'POST'])
 def admin_select():
     if request.method == 'POST':
-        selected_div = request.form['division']
-        return redirect(f'/admin-section?division={selected_div}')
+        selected_div = request.form.get('division', '')
+        selected_cls = request.form.get('cls', '')
+        return redirect(f'/admin-section?division={selected_div}&cls={selected_cls}')
     return render_template('main.html', page='admin-select')
+
 
 @app.route('/admin-section', methods=['GET'])
 def admin_section():
     division = request.args.get('division')
+    cls = request.args.get('cls')
     filtered = []
 
-    if division:
+    if division or cls:
         users = load_users()
         for email, user in users.items():
-            if user.get('division') == division:
-                user['email'] = email
-                filtered.append(user)
+            # support legacy keys by mirroring to short ones
+            if 'div' not in user and 'division' in user:
+                user['div'] = user.get('division')
+            if 'cls' not in user and 'class_name' in user:
+                user['cls'] = user.get('class_name')
+
+            if division and user.get('div') != division:
+                continue
+            if cls and user.get('cls') != cls:
+                continue
+            user_copy = dict(user)
+            user_copy['email'] = email
+            filtered.append(user_copy)
 
     return render_template('main.html', page='admin', users=filtered)
 
-import os
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=5000)
