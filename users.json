@@ -1,3 +1,37 @@
 {
-    
+    "devanandanr08@gmail.com": {
+        "name": "DEVANANDHAN R",
+        "password": "de",
+        "place": "kunnikode",
+        "dob": "2026-04-04",
+        "roll": "23",
+        "div": "A",
+        "cls": "6",
+        "marks": {
+            "first_term": {
+                "eng": "80",
+                "sl": "90",
+                "phy": "90",
+                "chem": "09",
+                "math": "8",
+                "cs": "8"
+            },
+            "second_term": {
+                "eng": "",
+                "sl": "",
+                "phy": "",
+                "chem": "",
+                "math": "",
+                "cs": ""
+            },
+            "final_term": {
+                "eng": "",
+                "sl": "",
+                "phy": "",
+                "chem": "",
+                "math": "",
+                "cs": ""
+            }
+        }
+    }
 }
