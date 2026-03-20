@@ -1,10 +1,14 @@
 from flask import Flask, render_template, request, redirect, session
 import os
 import json
+import tempfile
 
 app = Flask(__name__)
 app.secret_key = 'mysecretkey'
-USERS_FILE = 'users.json'
+
+# Pick a writable location for user data. In serverless (e.g., Vercel) the
+# project directory is read-only, so we default to the temp directory.
+USERS_FILE = os.environ.get("USERS_FILE_PATH", os.path.join(tempfile.gettempdir(), "users.json"))
 
 
 def load_users():
