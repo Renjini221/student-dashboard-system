@@ -17,15 +17,15 @@
                 "cs": "8"
             },
             "second_term": {
-                "eng": "",
-                "sl": "",
-                "phy": "",
-                "chem": "",
-                "math": "",
-                "cs": ""
+                "eng": "33",
+                "sl": "22",
+                "phy": "42",
+                "chem": "88",
+                "math": "99",
+                "cs": "8"
             },
             "final_term": {
-                "eng": "",
+                "eng": "99",
                 "sl": "",
                 "phy": "",
                 "chem": "",
@@ -33,5 +33,14 @@
                 "cs": ""
             }
         }
+    },
+    "babumelila1972@gmail.com": {
+        "name": "BABU M",
+        "password": "ba",
+        "place": "melila",
+        "dob": "9990-08-09",
+        "roll": "34",
+        "div": "B",
+        "cls": "8"
     }
 }
