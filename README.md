@@ -45,7 +45,10 @@ so i built this to keep everything organized and easy to access
 ## note
 
 * ai was only used for helping with styling and small ui improvements, all core logic and functionality were built by me
-* The password and username of the admin is admin itself.
+## admin page
+
+*username-admin
+*password-admim
 ---
 
 overall this is a simple project but useful and i plan to improve it further
